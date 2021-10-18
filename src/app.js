@@ -10,6 +10,12 @@ function displayTemperature(response) {
   humidityElement.innerHTML = response.data.main.humidity;
   let windElement = document.querySelector("#wind");
   windElement.innerHTML = Math.round(response.data.wind.speed);
+  let iconTodayElement = document.querySelector("#today-icon");
+  iconTodayElement.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
+  iconTodayElement.setAttribute("alt", response.data.weather[0].description);
 }
 
 let now = new Date();
@@ -36,7 +42,7 @@ let timeElement = document.querySelector("#time");
 timeElement.innerHTML = `${hours}:${minutes}`;
 
 let apiKey = "23ab03a6498fafc28975a1bf7ad1e307";
-let cityStart = "Amsterdam";
+let cityStart = "Buenos Aires";
 let units = "metric";
 let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityStart}&appid=${apiKey}&units=${units}`;
 
