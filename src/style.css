@@ -61,6 +61,10 @@ li{
    bottom: -10px;
 }
 
+#description {
+  text-transform: capitalize;
+}
+
 .unit{
   position: relative;
   top: -20px;
