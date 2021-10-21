@@ -21,6 +21,14 @@ let timeElement = document.querySelector("#time");
 dayElement.innerHTML = `${day}, `;
 timeElement.innerHTML = `${hours}:${minutes}`;
 
+function getForecast(coordinates) {
+  //alert(coordinates.lat);
+  let apiKey = "23ab03a6498fafc28975a1bf7ad1e307";
+  let units = "metric";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=${units}`;
+  axios.get(apiUrl).then(displayForecast);
+}
+
 function displayTemperature(response) {
   console.log(response.data);
   let temperatureElement = document.querySelector("#temperature");
@@ -40,6 +48,7 @@ function displayTemperature(response) {
     `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
   );
   iconTodayElement.setAttribute("alt", response.data.weather[0].description);
+  getForecast(response.data.coord);
 }
 
 function search(city) {
@@ -75,12 +84,38 @@ function displayCelsius(event) {
   temperatureElement.innerHTML = Math.round(celsiusTemperature);
 }
 
+function displayForecast(response) {
+  console.log(response.data.daily);
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = `<div class="row">`;
+  let days = ["Thu", "Fri", "Sat", "Sun"];
+  days.forEach(function (day) {
+    forecastHTML =
+      forecastHTML +
+      `<div class="col-2">
+              <span class="day-forecast">${day}</span>
+            </br>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/414/414927.png"
+                width="30"
+              />
+              </br>
+              <span class="min-forecast">15°</span>
+              <span class="max-forecast">20°</span>
+            </div>
+            `;
+  });
+  forecastHTML = forecastHTML + `</div>`;
+  forecastElement.innerHTML = forecastHTML;
+}
+
 let celsiusTemperature = null;
 
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", HandleSubmit);
 let cityStart = "New York";
 search(cityStart);
+//displayForecast();
 
 let fahrenheitLink = document.querySelector("#fahrenheit");
 fahrenheitLink.addEventListener("click", displayFahrenheit);
